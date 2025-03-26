@@ -10,7 +10,6 @@ function RegisterForm() {
   const [coords, setCoords] = useState({ lat: null, lng: null });
   const [loading, setLoading] = useState(false);
 
-  // ✅ Define getLocation at the top level
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -22,7 +21,6 @@ function RegisterForm() {
           toast.success('📍 Location access granted!');
 
           try {
-            // ✅ Use getLocationFromCoords here
             const address = await getLocationFromCoords(lat, lng);
             console.log(`🏡 Address: ${address}`);
             toast.info(`📍 Address: ${address}`);
@@ -80,12 +78,16 @@ function RegisterForm() {
 
       if (res.status === 201) {
         toast.success('✅ Successfully registered!');
-        setName('');
-        setPhoneNumber('');
-        setCoords({ lat: null, lng: null });
+      } else if (res.status === 200) {
+        toast.success('✅ Location updated successfully!');
       }
+
+      // ✅ Clear form fields after success
+      setName('');
+      setPhoneNumber('');
+      setCoords({ lat: null, lng: null });
     } catch (err) {
-      console.error('Registration error:', err.response?.data || err.message);
+      console.error('❌ Registration error:', err.response?.data || err.message);
       toast.error(err.response?.data?.message || '❌ Registration failed');
     } finally {
       setLoading(false);

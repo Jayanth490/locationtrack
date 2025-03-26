@@ -1,9 +1,8 @@
 const express = require('express');
-const { registerUser, getLocationByPhone } = require('../controllers/userController'); // ✅ Import only once
+const { registerUser } = require('../controllers/userController');
 
 const router = express.Router();
 
 router.post('/register', registerUser);
-router.get('/location/:phoneNumber', getLocationByPhone); // ✅ Route should be unique
 
 module.exports = router;
