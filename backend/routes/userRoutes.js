@@ -1,11 +1,9 @@
 const express = require('express');
-const { registerUser } = require('../controllers/userController');
+const { registerUser } = require('../controllers/userController'); // Import controller
 
 const router = express.Router();
 
-router.post('/register', (req, res) => {
-    console.log('📥 POST request received at /register');
-  });
-   // ✅ Fix here
+// Ensure POST method is used for registration
+router.post('/register', registerUser);
 
 module.exports = router;

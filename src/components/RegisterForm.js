@@ -10,9 +10,11 @@ function RegisterForm() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [coords, setCoords] = useState({ lat: null, lng: null });
   const [loading, setLoading] = useState(false);
+  const [gettingLocation, setGettingLocation] = useState(false); // Track geolocation progress
 
   const getLocation = () => {
     if (navigator.geolocation) {
+      setGettingLocation(true);
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const lat = position.coords.latitude;
@@ -36,7 +38,8 @@ function RegisterForm() {
             3: '❌ Location request timed out.',
           }[error.code] || '❌ Failed to get location.';
           toast.error(errorMessage);
-        }
+        },
+        { timeout: 10000 }
       );
     } else {
       toast.error('❌ Geolocation is not supported by this browser.');
@@ -47,6 +50,11 @@ function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!name) {
+      toast.error('❌ Please enter your name');
+      return;
+    }
 
     if (!isValidPhoneNumber(phoneNumber)) {
       toast.error('❌ Invalid phone number');
@@ -61,7 +69,7 @@ function RegisterForm() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/register`, {
+      const res = await axios.post(`/users/register`, {
         name,
         phoneNumber,
         lat: coords.lat,
@@ -111,9 +119,9 @@ function RegisterForm() {
             type="button"
             onClick={getLocation}
             className="register-button"
-            disabled={loading}
+            disabled={gettingLocation || loading} // Disable while geolocation is being fetched
           >
-            📍 Get Location
+            {gettingLocation ? 'Getting Location...' : '📍 Get Location'}
           </button>
           <button
             type="submit"

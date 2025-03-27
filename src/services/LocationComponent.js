@@ -1,7 +1,11 @@
 import { getLocationFromCoords } from '../utils/getLocationFromCoords';
 
 const handleSearch = async () => {
-  const { streetName, formattedAddress } = await getLocationFromCoords(lat, lng);
-  console.log(`Street: ${streetName}`);
-  console.log(`Full Address: ${formattedAddress}`);
+  const { addressFound, formattedAddress } = await getLocationFromCoords(lat, lng);
+
+  if (addressFound) {
+    console.log(`✅ Address found: ${formattedAddress}`);
+  } else {
+    console.log(`❌ Address not found: ${formattedAddress}`);
+  }
 };

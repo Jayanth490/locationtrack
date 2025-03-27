@@ -1,15 +1,18 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors');
+
 
 const router = express.Router();
-
+const cors = require('cors');
+// ✅ Use CORS with the correct origin
 router.use(cors({
-  origin: ['https://locationtrack-omega.vercel.app', 'http://localhost:3000'],
+  origin: 'https://locationtrack-omega.vercel.app/api', // Replace with your actual backend URL
   methods: ['GET'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // If you are dealing with cookies or sessions
 }));
 
+// ✅ Reverse geocoding route
 router.get('/reverse', async (req, res) => {
   const { lat, lon } = req.query;
 
@@ -25,14 +28,17 @@ router.get('/reverse', async (req, res) => {
         format: 'json',
         zoom: 18,
         addressdetails: 1
-      },
-      headers: {
-        'User-Agent': 'YourAppName/1.0'
       }
     });
-
-    console.log('🌍 Reverse Geocoding Response:', response.data);
-    res.json(response.data);
+    
+    console.log("Response from geocoding:", response.data); // Log the response to debug
+    
+    // Check if response has address details
+    if (response.data && response.data.display_name) {
+      res.json({ address: response.data.display_name });
+    } else {
+      res.status(404).json({ error: 'No address found for the provided coordinates' });
+    }
   } catch (err) {
     console.error('❌ Reverse geocoding failed:', err.message);
     res.status(500).json({ error: 'Failed to fetch address' });

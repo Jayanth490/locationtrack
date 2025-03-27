@@ -11,8 +11,8 @@ export const getLocationFromCoords = async (lat, lng) => {
     console.log('🌍 Full Response:', res.data);
 
     if (res.data?.address) {
-      const { house_number, road, suburb, city, state, country } = res.data.address;
-      const formattedAddress = [house_number, road, suburb, city, state, country]
+      const { road, suburb, city, state, country } = res.data.address;
+      const formattedAddress = [road, suburb, city, state, country]
         .filter(Boolean)
         .join(', ');
 
