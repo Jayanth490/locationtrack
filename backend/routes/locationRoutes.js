@@ -4,17 +4,12 @@ const cors = require('cors');
 
 const router = express.Router();
 
-// ✅ Allow CORS on this specific route
 router.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || 'http://localhost:3000', 
-    'https://locationtrack-omega.vercel.app'
-  ],
+  origin: ['https://locationtrack-omega.vercel.app', 'http://localhost:3000'],
   methods: ['GET'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// ✅ Reverse geocoding route
 router.get('/reverse', async (req, res) => {
   const { lat, lon } = req.query;
 
@@ -32,12 +27,11 @@ router.get('/reverse', async (req, res) => {
         addressdetails: 1
       },
       headers: {
-        'User-Agent': 'YourAppName/1.0' // ✅ Allowed in backend
+        'User-Agent': 'YourAppName/1.0'
       }
     });
 
-  
-
+    console.log('🌍 Reverse Geocoding Response:', response.data);
     res.json(response.data);
   } catch (err) {
     console.error('❌ Reverse geocoding failed:', err.message);

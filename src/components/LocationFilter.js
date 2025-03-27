@@ -22,21 +22,20 @@ function LocationFilter() {
       alert('❌ Please enter a valid 10-digit phone number');
       return;
     }
-
+  
     setLoading(true);
     setAddress('');
-
+  
     try {
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/location/${phone}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/location/${phone}`);
       console.log('✅ Response:', res.data);
-
+  
       if (res.data) {
-        const lat = parseFloat(res.data.latitude);
-        const lng = parseFloat(res.data.longitude);
-
-        if (!isNaN(lat) && !isNaN(lng)) {
-          setLocation({ lat, lng });
-          setAddress(`📍 Lat: ${lat}, Lng: ${lng}`);
+        const { latitude, longitude, address } = res.data;
+  
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+          setLocation({ lat: latitude, lng: longitude });
+          setAddress(address || '❌ Address not found.');
         } else {
           setAddress('❌ Invalid location data received.');
         }
@@ -48,7 +47,7 @@ function LocationFilter() {
       setLoading(false);
     }
   };
-
+  
   return (
     <div style={{ padding: '20px', textAlign: 'center' }}>
       <h2>🔎 Find Location</h2>
