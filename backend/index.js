@@ -9,11 +9,12 @@ const app = express();
 // ✅ Middleware should be defined before routes
 app.use(express.json());
 app.use(cors({
-  origin: ['https://locationtrack-omega.vercel.app','http://localhost:3000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: ['https://locationtrack-omega.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // ✅ POST must be allowed
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
 
 // ✅ Define routes after middleware
 app.use('/api/users', userRoutes);

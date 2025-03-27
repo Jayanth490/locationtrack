@@ -61,7 +61,7 @@ function RegisterForm() {
     setLoading(true);
 
     try {
-      const res = await axios.post('/users/register', {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/register`, {
         name,
         phoneNumber,
         lat: coords.lat,
