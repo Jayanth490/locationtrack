@@ -1,17 +1,22 @@
 const pool = require('../config/db');
 
 const createUser = async (name, phoneNumber, lat, lng) => {
-  console.log('🛠️ Creating user:', { name, phoneNumber, lat, lng });
+  console.log('🛠️ Creating or updating user:', { name, phoneNumber, lat, lng });
 
   const query = `
     INSERT INTO users (name, phone_number, latitude, longitude)
     VALUES ($1, $2, $3, $4)
+    ON CONFLICT (phone_number) -- 🔥 Handle conflict on phone number
+    DO UPDATE SET 
+      name = EXCLUDED.name,
+      latitude = EXCLUDED.latitude,
+      longitude = EXCLUDED.longitude
     RETURNING *;
   `;
 
   try {
     const result = await pool.query(query, [name, phoneNumber, lat, lng]);
-    console.log('✅ User created:', result.rows[0]);
+    console.log('✅ User created/updated:', result.rows[0]);
     return result.rows[0];
   } catch (error) {
     console.error('❌ Database error:', error);

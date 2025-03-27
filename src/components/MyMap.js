@@ -1,24 +1,37 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import '../App.css';
+const MapUpdater = ({ lat, lng }) => {
+  const map = useMap();
 
-const MyMap = () => {
-  const position = [51.505, -0.09]; // Default center position (latitude, longitude)
+  useEffect(() => {
+    if (lat && lng) {
+      map.setView([lat, lng], 13); // Adjust zoom level if needed
+    }
+  }, [lat, lng, map]);
 
+  return null;
+};
+
+const MyMap = ({ lat, lng }) => {
   return (
     <MapContainer
-      center={position}
+      center={[lat || 51.505, lng || -0.09]}
       zoom={13}
-      style={{ height: '400px', width: '100%' }}
+      className="map-container"
     >
-      {/* Use OpenStreetMap tiles */}
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={position}>
-        <Popup>
-          A sample marker! <br /> Easily customizable.
-        </Popup>
-      </Marker>
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+      {/* Update center when lat/lng changes */}
+      <MapUpdater lat={lat} lng={lng} />
+
+      {lat && lng && (
+        <Marker position={[lat, lng]}>
+          <Popup>
+            📍 Latitude: {lat} <br /> 📍 Longitude: {lng}
+          </Popup>
+        </Marker>
+      )}
     </MapContainer>
   );
 };

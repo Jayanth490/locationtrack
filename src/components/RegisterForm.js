@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import axios from '../utils/axios';
+import axios from '../utils/axios'; // ✅ Import instance
 import './RegisterForm.css';
 import { getLocationFromCoords } from '../utils/getLocationFromCoords';
+import MyMap from './MyMap';
 
 function RegisterForm() {
   const [name, setName] = useState('');
@@ -16,7 +17,6 @@ function RegisterForm() {
         async (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-
           setCoords({ lat, lng });
           toast.success('📍 Location access granted!');
 
@@ -30,20 +30,12 @@ function RegisterForm() {
           }
         },
         (error) => {
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              toast.error('❌ Location permission denied.');
-              break;
-            case error.POSITION_UNAVAILABLE:
-              toast.error('❌ Location unavailable.');
-              break;
-            case error.TIMEOUT:
-              toast.error('❌ Location request timed out.');
-              break;
-            default:
-              toast.error('❌ Failed to get location.');
-              break;
-          }
+          const errorMessage = {
+            1: '❌ Location permission denied.',
+            2: '❌ Location unavailable.',
+            3: '❌ Location request timed out.',
+          }[error.code] || '❌ Failed to get location.';
+          toast.error(errorMessage);
         }
       );
     } else {
@@ -69,7 +61,7 @@ function RegisterForm() {
     setLoading(true);
 
     try {
-      const res = await axios.post('users/register', {
+      const res = await axios.post('/users/register', {
         name,
         phoneNumber,
         lat: coords.lat,
@@ -132,6 +124,9 @@ function RegisterForm() {
           </button>
         </div>
       </form>
+
+      {/* ✅ Moved MyMap here */}
+      {coords.lat && coords.lng && <MyMap lat={coords.lat} lng={coords.lng} />}
     </div>
   );
 }

@@ -59,3 +59,9 @@ button:hover {
   height: 500px; /* Adjust height as needed */
   border: 1px solid #ccc; /* Optional for visibility */
 }
+.map-container {
+  height: 400px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}

@@ -4,7 +4,7 @@ export const getLocationFromCoords = async (lat, lng) => {
   try {
     console.log(`📍 Fetching address for: Latitude: ${lat}, Longitude: ${lng}`);
 
-    const res = await axios.get('http://localhost:5000/api/location/reverse', {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/location/reverse`, {
       params: { lat, lon: lng }
     });
 

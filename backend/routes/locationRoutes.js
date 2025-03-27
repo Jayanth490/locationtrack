@@ -6,7 +6,10 @@ const router = express.Router();
 
 // ✅ Allow CORS on this specific route
 router.use(cors({
-  origin: 'http://localhost:3000', // Allow frontend origin
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:3000', 
+    'https://locationtrack-omega.vercel.app'
+  ],
   methods: ['GET'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
