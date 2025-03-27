@@ -14,33 +14,29 @@ function LocationFilter() {
   const [address, setAddress] = useState('');
 
   const handleSearch = async () => {
-    console.log('Search button clicked');
-    console.log('Phone:', phone);
+    if (!/^[0-9]{10}$/.test(phone)) {
+      alert('Please enter a valid 10-digit phone number');
+      return;
+    }
 
     try {
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/${phone}`);
-      console.log('Response:', res);
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/location/${phone}`);
+      console.log('Response:', res.data);
 
       if (res.data) {
         const lat = parseFloat(res.data.latitude);
         const lng = parseFloat(res.data.longitude);
 
         if (!isNaN(lat) && !isNaN(lng)) {
-          const loc = { lat, lng };
-          setLocation(loc);
-
-          // Get Address using lat, lng
-          const fetchedAddress = `Lat: ${lat}, Lng: ${lng}`;
-          console.log('Fetched Address:', fetchedAddress);
-          setAddress(fetchedAddress);
+          setLocation({ lat, lng });
+          setAddress(`Lat: ${lat}, Lng: ${lng}`);
         } else {
-          console.error('Invalid latitude or longitude:', lat, lng);
-          alert('Invalid location data received.');
+          setAddress('Invalid location data received.');
         }
       }
     } catch (err) {
       console.error('Location fetch failed:', err);
-      alert('Failed to fetch location. Please try again.');
+      setAddress('Failed to fetch location. Please try again.');
     }
   };
 
@@ -56,14 +52,10 @@ function LocationFilter() {
       <button onClick={handleSearch}>Search</button>
 
       {location && (
-        <MapContainer center={location} zoom={15} style={containerStyle}>
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+        <MapContainer center={location} zoom={15} key={`${location.lat}-${location.lng}`} style={containerStyle}>
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Marker position={location}>
-            <Popup>
-              {address || 'Fetching address...'}
-            </Popup>
+            <Popup>{address || 'Fetching address...'}</Popup>
           </Marker>
         </MapContainer>
       )}
