@@ -22,8 +22,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "vercel-build": "echo 'No build step needed for Express server'"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
