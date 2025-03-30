@@ -6,7 +6,7 @@ const router = express.Router();
 const cors = require('cors');
 // ✅ Use CORS with the correct origin
 router.use(cors({
-  origin: 'https://locationtrack-omega.vercel.app/api', // Replace with your actual backend URL
+  origin: 'https://locationtrack-omega.vercel.app',
   methods: ['GET'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // If you are dealing with cookies or sessions
@@ -30,9 +30,9 @@ router.get('/reverse', async (req, res) => {
         addressdetails: 1
       }
     });
-    
+
     console.log("Response from geocoding:", response.data); // Log the response to debug
-    
+
     // Check if response has address details
     if (response.data && response.data.display_name) {
       res.json({ address: response.data.display_name });
