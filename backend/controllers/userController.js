@@ -1,25 +1,21 @@
-export const getLocationByPhoneNumber = async (req, res) => {
-  const { phoneNumber } = req.params; // Change from req.query to req.params
+import User from '../models/User.js'; // Ensure correct model path
 
-  if (!phoneNumber) {
-    return res.status(400).json({ message: 'Phone number is required' });
-  }
+export const getUserLocation = async (req, res) => {
+    try {
+        const { phone } = req.params;
+        const user = await User.findOne({ phone });
 
-  try {
-    const user = await getUserByPhoneNumber(phoneNumber);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+        res.json({
+            latitude: user.latitude,
+            longitude: user.longitude,
+            address: user.address || "Address not available",
+        });
+    } catch (error) {
+        console.error("❌ Error fetching location:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
-
-    res.json({
-      phoneNumber: user.phone_number,
-      latitude: user.latitude,
-      longitude: user.longitude,
-      address: 'Fetching address...', // Optional
-    });
-  } catch (err) {
-    console.error('❌ Error fetching location:', err.message);
-    res.status(500).json({ message: 'Error fetching location' });
-  }
 };
