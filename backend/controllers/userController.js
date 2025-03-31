@@ -1,4 +1,4 @@
-import { createUser, getUserByPhoneNumber } from '../models/User';
+import { createUser, getUserByPhoneNumber } from '../models/user.js';
 
 const registerUser = async (req, res) => {
   const { name, phoneNumber, lat, lng } = req.body;
