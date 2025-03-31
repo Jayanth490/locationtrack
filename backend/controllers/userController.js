@@ -1,4 +1,4 @@
-const { createUser, getUserByPhoneNumber } = require('../models/user');
+import { createUser, getUserByPhoneNumber } from '../models/User';
 
 const registerUser = async (req, res) => {
   const { name, phoneNumber, lat, lng } = req.body;
@@ -29,4 +29,4 @@ const registerUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser };
+export default { registerUser };
