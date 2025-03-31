@@ -1,4 +1,4 @@
-const { createUser, getUserByPhoneNumber } = require('../models/user');
+const { createUser, getUserByPhoneNumber } = require('../models/User.js');
 
 const registerUser = async (req, res) => {
   const { name, phoneNumber, lat, lng } = req.body;
