@@ -1,32 +1,25 @@
-import { createUser, getUserByPhoneNumber } from '../models/User.js';
+export const getLocationByPhoneNumber = async (req, res) => {
+  const { phoneNumber } = req.params; // Change from req.query to req.params
 
-export const registerUser = async (req, res) => {
-  const { name, phoneNumber, lat, lng } = req.body;
-
-  // ✅ Validate input fields
-  if (!name || !phoneNumber || !lat || !lng) {
-    return res.status(400).json({ message: 'All fields are required' });
+  if (!phoneNumber) {
+    return res.status(400).json({ message: 'Phone number is required' });
   }
 
   try {
-    // ✅ Check if user already exists by phone number
-    const existingUser = await getUserByPhoneNumber(phoneNumber);
+    const user = await getUserByPhoneNumber(phoneNumber);
 
-    if (existingUser) {
-      return res.status(200).json({ message: 'User already exists. Location updated!' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // ✅ Create new user if not exists
-    const newUser = await createUser(name, phoneNumber, lat, lng);
-
-    return res.status(201).json({
-      message: 'User registered successfully',
-      user: newUser,
+    res.json({
+      phoneNumber: user.phone_number,
+      latitude: user.latitude,
+      longitude: user.longitude,
+      address: 'Fetching address...', // Optional
     });
   } catch (err) {
-    console.error('❌ Registration failed:', err.message);
-    return res.status(500).json({ message: 'Registration failed', error: err.message });
+    console.error('❌ Error fetching location:', err.message);
+    res.status(500).json({ message: 'Error fetching location' });
   }
 };
-
-export default registerUser;
