@@ -1,6 +1,6 @@
-const { createUser, getUserByPhoneNumber } = await import('../models/User.js');
+import { createUser, getUserByPhoneNumber } from '../models/User.js';
 
-const registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   const { name, phoneNumber, lat, lng } = req.body;
 
   // ✅ Validate input fields
@@ -29,4 +29,4 @@ const registerUser = async (req, res) => {
   }
 };
 
-export default { registerUser };
+export default registerUser;
