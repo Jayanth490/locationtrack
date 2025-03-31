@@ -3,6 +3,9 @@ import { registerUser } from '../controllers/userController.js'; // Ensure .js e
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+    res.send('✅ User API is working!');
+});
 
 // Ensure POST method is used for registration
 router.post('/register', registerUser);
