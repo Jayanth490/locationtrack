@@ -6,5 +6,4 @@ const router = express.Router();
 
 // Ensure POST method is used for registration
 router.post('/register', registerUser);
-
-module.exports = router;
+export default router;
