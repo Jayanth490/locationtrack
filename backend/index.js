@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const db = require('./config/db'); // Database connection (ensure it's correctly set up)
-const userRoutes = require('./routes/userRoutes'); // Import userRoutes
+import express from 'express';
+import cors from 'cors';
+import db from './config/db.js'; // Ensure the file extension is included
+import userRoutes from './routes/userRoutes.js'; // Ensure the file extension is included
 
 const app = express();
 
@@ -37,4 +37,4 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
 
-module.exports = app;
+export default app;
