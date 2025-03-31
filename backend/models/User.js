@@ -1,6 +1,6 @@
 import pool from '../config/db.js';
 
-const createUser = async (name, phoneNumber, lat, lng) => {
+export const createUser = async (name, phoneNumber, lat, lng) => {
   console.log('🛠️ Creating or updating user:', { name, phoneNumber, lat, lng });
 
   const query = `
@@ -24,7 +24,7 @@ const createUser = async (name, phoneNumber, lat, lng) => {
   }
 };
 
-const getUserByPhoneNumber = async (phoneNumber) => {
+export const getUserByPhoneNumber = async (phoneNumber) => {
   console.log('🔍 Searching user by phone:', phoneNumber);
 
   const query = `SELECT * FROM users WHERE phone_number = $1`;
@@ -43,5 +43,3 @@ const getUserByPhoneNumber = async (phoneNumber) => {
     throw error;
   }
 };
-
-module.exports = { createUser, getUserByPhoneNumber };
