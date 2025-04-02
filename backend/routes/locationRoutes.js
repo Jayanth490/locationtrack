@@ -25,4 +25,8 @@ router.get('/reverse', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 55d26f45f02697479264579f05e96410dec856c8
 export default router;
