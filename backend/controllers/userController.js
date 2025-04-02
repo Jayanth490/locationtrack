@@ -18,4 +18,5 @@ export const getUserLocation = async (req, res) => {
         console.error("❌ Error fetching location:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
+
 };
