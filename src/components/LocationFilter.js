@@ -22,17 +22,17 @@ function LocationFilter() {
       alert('❌ Please enter a valid 10-digit phone number');
       return;
     }
-  
+
     setLoading(true);
     setAddress('');
-  
+
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/location/${phone}`);
       console.log('✅ Response:', res.data);
-  
+
       if (res.data) {
         const { latitude, longitude, address } = res.data;
-  
+
         if (!isNaN(latitude) && !isNaN(longitude)) {
           setLocation({ lat: latitude, lng: longitude });
           setAddress(address || '❌ Address not found.');
@@ -47,7 +47,30 @@ function LocationFilter() {
       setLoading(false);
     }
   };
-  
+
+  const handleUpdateLocation = async (newLat, newLng) => {
+    if (!newLat || !newLng) {
+      alert('❌ Please provide valid coordinates for location update.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/location/${phone}`, {
+        params: { lat: newLat, lng: newLng },  // Sending updated location
+      });
+      console.log('✅ Location updated:', res.data);
+      setLocation({ lat: newLat, lng: newLng });
+      setAddress(res.data.address || '❌ Address not found');
+    } catch (err) {
+      console.error('❌ Failed to update location:', err);
+      setAddress('❌ Failed to update location. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={{ padding: '20px', textAlign: 'center' }}>
       <h2>🔎 Find Location</h2>
@@ -104,6 +127,41 @@ function LocationFilter() {
       {address && (
         <p style={{ marginTop: '10px', color: '#555' }}>{address}</p>
       )}
+
+      {/* Optional form to update location */}
+      <div style={{ marginTop: '20px' }}>
+        <h3>📍 Update Location</h3>
+        <input
+          type="number"
+          placeholder="New Latitude"
+          id="newLat"
+          style={{ margin: '5px' }}
+        />
+        <input
+          type="number"
+          placeholder="New Longitude"
+          id="newLng"
+          style={{ margin: '5px' }}
+        />
+        <button
+          onClick={() => {
+            const newLat = parseFloat(document.getElementById('newLat').value);
+            const newLng = parseFloat(document.getElementById('newLng').value);
+            handleUpdateLocation(newLat, newLng);
+          }}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#ff9900',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            marginTop: '10px',
+          }}
+        >
+          Update Location
+        </button>
+      </div>
     </div>
   );
 }
