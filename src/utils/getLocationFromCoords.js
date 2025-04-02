@@ -1,39 +1,28 @@
-import axios from "axios";
+import axios from 'axios';
+
 export const getLocationFromCoords = async (lat, lng) => {
   try {
     console.log(`📍 Fetching address for: Latitude: ${lat}, Longitude: ${lng}`);
 
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/location/reverse`, {
-      params: { lat, lon: lng },
+      params: { lat, lon: lng }
     });
 
     console.log('🌍 Full Response:', res.data);
 
     if (res.data?.address) {
-      const { city, state, country } = res.data.address;
-
-      // Check if any component exists and return the formatted address
-      const formattedAddress = [city, state, country]
+      const { road, suburb, city, state, country } = res.data.address;
+      const formattedAddress = [road, suburb, city, state, country]
         .filter(Boolean)
-        .join(', ') || 'Address not found';
+        .join(', ');
 
-      // If any part of the address is available, consider it "address found"
-      const addressFound = formattedAddress !== 'Address not found';
-
-      console.log(`✅ Address found: ${addressFound}`);
-      console.log(`✅ Full address: ${formattedAddress}`);
-
-      return { addressFound, formattedAddress };
+      console.log(`✅ Found address: ${formattedAddress}`);
+      return formattedAddress || 'Address not found';
     } else {
       throw new Error('No address found');
     }
   } catch (err) {
     console.error('❌ Reverse geocoding failed:', err.message);
-    
-    // Return a fallback message if the geocoding fails
-    return {
-      addressFound: false,
-      formattedAddress: 'Address not found. Could not retrieve location.',
-    };
+    return 'Address not found';
   }
 };
