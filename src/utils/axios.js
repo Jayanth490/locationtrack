@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = process.env.REACT_APP_API_URL || 'http://your-backend-url.com/api'; // Replace with your correct URL
+const API_URL = process.env.REACT_APP_API_URL || 'https://locationtrack-3inh.onrender.com/api'; // Replace with your correct URL
 
 const instance = axios.create({
   baseURL: API_URL,
