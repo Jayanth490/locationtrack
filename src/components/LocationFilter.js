@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -18,9 +18,7 @@ function LocationFilter() {
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
-    const sanitizedPhone = phone.trim().replace(/\s+/g, ''); // Remove spaces
-
-    if (!/^\d{10}$/.test(sanitizedPhone)) {
+    if (!/^[0-9]{10}$/.test(phone)) {
       alert('❌ Please enter a valid 10-digit phone number');
       return;
     }
@@ -29,7 +27,7 @@ function LocationFilter() {
     setAddress('');
 
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/location/${sanitizedPhone}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/location/${phone}`);
       console.log('✅ Response:', res.data);
 
       if (res.data) {
@@ -43,14 +41,13 @@ function LocationFilter() {
         }
       }
     } catch (err) {
-      console.error('❌ Location fetch failed:', err.message);
+      console.error('❌ Location fetch failed:', err);
       setAddress(err.response?.data?.message || '❌ Failed to fetch location. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-<<<<<<< HEAD
   const handleUpdateLocation = async (newLat, newLng) => {
     if (!newLat || !newLng) {
       alert('❌ Please provide valid coordinates for location update.');
@@ -74,8 +71,6 @@ function LocationFilter() {
     }
   };
 
-=======
->>>>>>> 55d26f45f02697479264579f05e96410dec856c8
   return (
     <div style={{ padding: '20px', textAlign: 'center' }}>
       <h2>🔎 Find Location</h2>
@@ -114,8 +109,6 @@ function LocationFilter() {
       >
         {loading ? 'Searching...' : 'Search'}
       </button>
-
-      {loading && <p>Loading...</p>}
 
       {location && (
         <MapContainer
