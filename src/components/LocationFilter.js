@@ -110,19 +110,20 @@ function LocationFilter() {
         {loading ? 'Searching...' : 'Search'}
       </button>
 
-      {location && (
-        <MapContainer
-          center={location}
-          zoom={15}
-          key={`${location.lat}-${location.lng}`} // Ensures map re-renders correctly
-          style={containerStyle}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Marker position={location}>
-            <Popup>{address || 'Fetching address...'}</Popup>
-          </Marker>
-        </MapContainer>
-      )}
+    {/* {location && (
+  <MapContainer
+    center={location}
+    zoom={15}
+    key={`${location.lat}-${location.lng}`}
+    style={containerStyle}
+  >
+    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <Marker position={location}>
+      <Popup>{address || 'Fetching address...'}</Popup>
+    </Marker>
+  </MapContainer>
+)} */}
+
 
       {address && (
         <p style={{ marginTop: '10px', color: '#555' }}>{address}</p>
